@@ -8,43 +8,61 @@ endif
 let g:loaded_numbertoggle = 1
 let g:insertmode = 0
 let g:focus = 1
-let g:relativemode = 1
 
-" Enables relative numbers.
+" 0: no number
+" 1: absolute number
+" 2: relative number
+let g:numbermode = 0
+
+function! DisableNumbers()
+  set nonumber
+  set norelativenumber
+endfunction
+
+function! EnableAbsoluteNumbers()
+  set number
+  set norelativenumber
+endfunction
+
 function! EnableRelativeNumbers()
   set number
   set relativenumber
-endfunc
+endfunction
 
-" Disables relative numbers.
-function! DisableRelativeNumbers()
-  set number
-  set norelativenumber
-endfunc
-
-" NumberToggle toggles between relative and absolute line numbers
+" NumberToggle toggles between modi
 function! NumberToggle()
-  if(&relativenumber == 1)
-    call DisableRelativeNumbers()
-    let g:relativemode = 0
-  else
+  if(g:numbermode == 0)
+    call EnableAbsoluteNumbers()
+    let g:numbermode = 1
+  elseif(g:numbermode == 1)
     call EnableRelativeNumbers()
-    let g:relativemode = 1
+    let g:numbermode = 2
+  else
+    call DisableNumbers()
+    let g:numbermode = 0
   endif
 endfunc
 
 function! UpdateMode()
-  if(&number == 0 && &relativenumber == 0)
-    return
-  end
-
-  if(g:focus == 0)
-    call DisableRelativeNumbers()
-  elseif(g:insertmode == 0 && g:relativemode == 1)
-    call EnableRelativeNumbers()
+  echom "number: " g:numbermode
+  echom "focus:  " g:focus
+  echom "insert: " g:insertmode
+  if(g:numbermode != 0)
+    if(g:focus == 0)
+      echom "absolute numbers"
+      call EnableAbsoluteNumbers()
+    elseif(g:insertmode == 0 && g:numbermode == 2)
+      echom "relative numbers"
+      call EnableRelativeNumbers()
+    else
+      echom "absolute numbers"
+      call EnableAbsoluteNumbers()
+    endif
   else
-    call DisableRelativeNumbers()
-  end
+    echom "no numbers"
+    call DisableNumbers()
+  endif
+  echom ""
 
   if !exists("&numberwidth") || &numberwidth <= 4
     " Avoid changing actual width of the number column with each jump between
