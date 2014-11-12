@@ -18,7 +18,7 @@ endfunc
 
 " Disables relative numbers.
 function! DisableRelativeNumbers()
-  set number
+  set nonumber
   set norelativenumber
 endfunc
 
