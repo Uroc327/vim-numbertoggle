@@ -15,16 +15,19 @@ let g:focus = 1
 let g:numbermode = 0
 
 function! DisableNumbers()
+  Decho "disabling numbers"
   set nonumber
   set norelativenumber
 endfunction
 
 function! EnableAbsoluteNumbers()
+  Decho "enabling absolute numbers"
   set number
   set norelativenumber
 endfunction
 
 function! EnableRelativeNumbers()
+  Decho "enabling relative numbers"
   set number
   set relativenumber
 endfunction
@@ -44,25 +47,25 @@ function! NumberToggle()
 endfunc
 
 function! UpdateMode()
-  echom "number: " g:numbermode
-  echom "focus:  " g:focus
-  echom "insert: " g:insertmode
+  Decho "number: " g:numbermode
+  Decho "focus:  " g:focus
+  Decho "insert: " g:insertmode
   if(g:numbermode != 0)
     if(g:focus == 0)
-      echom "absolute numbers"
+      Decho "absolute numbers"
       call EnableAbsoluteNumbers()
     elseif(g:insertmode == 0 && g:numbermode == 2)
-      echom "relative numbers"
+      Decho "relative numbers"
       call EnableRelativeNumbers()
     else
-      echom "absolute numbers"
+      Decho "absolute numbers"
       call EnableAbsoluteNumbers()
     endif
   else
-    echom "no numbers"
+    Decho "no numbers"
     call DisableNumbers()
   endif
-  echom ""
+  Decho ""
 
   if !exists("&numberwidth") || &numberwidth <= 4
     " Avoid changing actual width of the number column with each jump between
